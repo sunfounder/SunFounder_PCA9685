@@ -91,14 +91,14 @@ def test():
 		time.sleep(0.5)
 		print '\nChannel %d' % chn
 		a = Servo(chn)
-		for i in range(0, 180, 1):
+		for i in range(0, 181, 1):
 			print '  Angle: %d' % i
 			a.turn(i)
-			time.sleep(0.2)
-		for i in range(180, 0, -1):
+			time.sleep(0.007)
+		for i in range(180, -1, -1):
 			print '  Angle: %d' % i
 			a.turn(i)
-			time.sleep(0.2)
+			time.sleep(0.007)
 
 if __name__ == '__main__':
 	test()
