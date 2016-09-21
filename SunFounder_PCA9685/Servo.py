@@ -28,7 +28,7 @@ class Servo(object):
 	_DEBUG = False
 	_DEBUG_INFO = 'DEBUG "Servo.py":'
 
-	def __init__(self, channel, offset=0, lock=True):
+	def __init__(self, channel, offset=0, lock=True, bus_number=None, address=0x40):
 		''' Init a servo on specific channel, this offset '''
 		if channel<0 or channel > 16:
 			raise ValueError("Servo channel \"{0}\" is not in (0, 15).".format(channel))
@@ -38,7 +38,7 @@ class Servo(object):
 		self.offset = offset
 		self.lock = lock
 
-		self.pwm = PCA9685.PWM()
+		self.pwm = PCA9685.PWM(bus_number=bus_number, address=address)
 		self.pwm.set_frequency(60)
 		self.pwm.set_value(self.channel, 0, self._DEFAULT_PULSE_WIDTH)
 
@@ -90,7 +90,7 @@ def test():
 	for chn in range(16):
 		time.sleep(0.5)
 		print '\nChannel %d' % chn
-		a = Servo(chn, debug=True)
+		a = Servo(chn)
 		for i in range(0, 180, 1):
 			print '  Angle: %d' % i
 			a.turn(i)
