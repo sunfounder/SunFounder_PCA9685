@@ -1,75 +1,22 @@
-## {Repository Name}
-{thing name}
+## SunFounder PCA9685
+SunFounder PCA9685
 
 Quick Links:
 
- * [About {thing name}](#about_this_{thing})
+ * [About SunFounder PCA9685](#about_this_module)
  * [Update](#update)
- * [Trouble Shootings](#trouble)
-    * [{ERROR 1}](#error1)
-    * [{ERROR 2}](#error2)
  * [About SunFounder](#about_sunfounder)
  * [License](#license)
  * [Contact us](#contact_us)
 
-<a id="about_this_{thing}"></a>
-### About {thing name}:
-{discriptions}
-
-#### Notice:
-{notice}
+<a id="about_this_module"></a>
+### About SunFounder PCA9685:
+This module is for SunFounder PCA9685 the PCB board, a 16-channel 12-bit I2C Bus PWM Driver.
 
 <a id="update"></a>
 ### Update:
-{YYYY-MM-DD}:
- - {update 4}
-    - {update 4 details}
-
-{YYYY-MM-DD}:
- - {update 3}
-
-{YYYY-MM-DD}:
- - {update 2}
-    - {update 2 details}
-
-{YYYY-MM-DD}:
- - {update 1}
- 	- {update 1 details}
-
-
-<a id="trouble"></a>
-###Trouble Shootings:
-<a id="error1"></a>
-#### {ERROR 1}
-
-	{error informations}
-
- - **Reason**:
-    {reason}
- - **Solution**:
-    {solution 1
-    1. step 1
-    2. step 2}
-    
-    {solution 2
-    1. step 1
-    2. step 2}
-
-<a id="error2"></a>
-#### {ERROR 2}
-
-    {error informations}
-
- - **Reason**:
-    {reason}
- - **Solution**:
-    {solution 1
-    1. step 1
-    2. step 2}
-    
-    {solution 2
-    1. step 1
-    2. step 2}
+2016-09-21:
+ - New Release
 
 ----------------------------------------------
 <a id="about_sunfounder"></a>
@@ -79,22 +26,22 @@ SunFounder is a technology company focused on Raspberry Pi and Arduino open sour
 ----------------------------------------------
 <a id="license"></a>
 ### License
-This is the code for {thing name}.
+This is the code for SunFounder PCA9685.
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied wa rranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-{Repository Name} comes with ABSOLUTELY NO WARRANTY; for details run ./show w. This is free software, and you are welcome to redistribute it under certain conditions; run ./show c for details.
+SunFounder PCA9685 comes with ABSOLUTELY NO WARRANTY; for details run ./show w. This is free software, and you are welcome to redistribute it under certain conditions; run ./show c for details.
 
-SunFounder, Inc., hereby disclaims all copyright interest in the program '{Repository Name}' (which makes passes at compilers).
+SunFounder, Inc., hereby disclaims all copyright interest in the program 'SunFounder PCA9685' (which makes passes at compilers).
 
 Mike Huang, 21 August 2015
 
 Mike Huang, Chief Executive Officer
 
-Email: service@sunfounder.com
+Email: service@sunfounder.com, support@sunfounder.com
 
 ----------------------------------------------
 <a id="contact_us"></a>
@@ -103,4 +50,4 @@ website:
 	www.sunfounder.com
 
 E-mail:
-	service@sunfounder.com
+	service@sunfounder.com, support@sunfounder.com
