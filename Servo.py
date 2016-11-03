@@ -49,14 +49,19 @@ class Servo(object):
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Angle %d equals Analog_value %d' % (angle, analog_value)
 		return analog_value
-		
-	def set_offset(self, value):
+
+	@property
+	def offset(self):
+		return self._offset
+
+	@offset.setter
+	def offset(self, value):
 		''' Set offset for much user-friendly '''
 		self.offset = value
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Set offset to %d' % self.offset
 
-	def turn(self, angle):
+	def write(self, angle):
 		''' Turn the servo with giving angle. '''
 		if self.lock:
 			if angle > 180:
@@ -72,7 +77,12 @@ class Servo(object):
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Turn angle = %d' % angle
 
-	def set_debug(self, debug):
+	@property
+	def debug(self):
+		return self._DEBUG
+
+	@debug.setter
+	def debug(self, debug):
 		''' Set if debug information shows '''
 		if debug in (True, False):
 			self._DEBUG = debug
@@ -85,20 +95,33 @@ class Servo(object):
 			print self._DEBUG_INFO, "Set debug off"
 
 def test():
-	'''Servo driver test on all channel'''
+	'''Servo driver test on channel 1'''
 	import time
-	for chn in range(16):
-		time.sleep(0.5)
-		print '\nChannel %d' % chn
-		a = Servo(chn)
-		for i in range(0, 181, 1):
-			print '  Angle: %d' % i
-			a.turn(i)
-			time.sleep(0.007)
-		for i in range(180, -1, -1):
-			print '  Angle: %d' % i
-			a.turn(i)
-			time.sleep(0.007)
+	a = Servo(1)
+	for i in range(0, 180, 5):
+		print i
+		a.turn(i)
+		time.sleep(0.1)
+	for i in range(180, 0, -5):
+		print i
+		a.turn(i)
+		time.sleep(0.1)
+	for i in range(0, 91, 2):
+		a.turn(i)
+		time.sleep(0.05)
+	print i
+
+def install():
+	all_servo = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]
+	for i in range(16):
+		all_servo[i] = Servo(i)
+	for servo in all_servo:
+		servo.turn(90)
 
 if __name__ == '__main__':
-	test()
+	import sys
+	if len(sys.argv) == 2:
+		if sys.argv[1] == "install":
+			install()
+	else:
+		test()

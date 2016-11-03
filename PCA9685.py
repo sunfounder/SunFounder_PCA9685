@@ -40,11 +40,47 @@ class PWM(object):
 	_INVRT				= 0x10
 	_OUTDRV				= 0x04
 
-	_BUS_0_TYPES = ['Pi 1 Model B']
-	_BUS_1_TYPES = ['Pi 3 Model B', 'Pi 2 Model B', 'Pi 1 Model B+']
+	RPI_REVISION_0 = ["900092"]
+	RPI_REVISION_1_MODULE_B = ["Beta", "0002", "0003", "0004", "0005", "0006", "000d", "000e", "000f"]
+	RPI_REVISION_1_MODULE_A = ["0007", "0008", "0009",]
+	RPI_REVISION_1_MODULE_BP = ["0010", "0013"]
+	RPI_REVISION_1_MODULE_AP = ["0012"]
+	RPI_REVISION_2 = ["a01041", "a21041"]
+	RPI_REVISION_3 = ["a02082", "a22082"]
 
 	_DEBUG = False
 	_DEBUG_INFO = 'DEBUG "PCA9685.py":'
+
+	def _get_bus_number(self):
+		"Gets the version number of the Raspberry Pi board"
+		# Courtesy quick2wire-python-api
+		# https://github.com/quick2wire/quick2wire-python-api
+		# Updated revision info from: http://elinux.org/RPi_HardwareHistory#Board_Revision_History
+		try:
+			f = open('/proc/cpuinfo','r')
+			for line in f:
+				if line.startswith('Revision'):
+					if line[11:-1] in self.RPI_REVISION_0:
+						return 0
+					elif line[11:-1] in self.RPI_REVISION_1_MODULE_B:
+						return 0
+					elif line[11:-1] in self.RPI_REVISION_1_MODULE_A:
+						return 0
+					elif line[11:-1] in self.RPI_REVISION_1_MODULE_BP:
+						return 1
+					elif line[11:-1] in self.RPI_REVISION_1_MODULE_AP:
+						return 0
+					elif line[11:-1] in self.RPI_REVISION_2:
+						return 1
+					elif line[11:-1] in self.RPI_REVISION_3:
+						return 1
+					else:
+						return line[11:-1]
+		except:
+			f.close()
+			return 'Open file error'
+		finally:
+			f.close()
 
 	def __init__(self, bus_number=None, address=0x40):
 		'''Init the class with bus_number and address'''
@@ -67,6 +103,7 @@ class PWM(object):
 		mode1 = mode1 & ~self._SLEEP
 		self._write_byte_data(self._MODE1, mode1)
 		time.sleep(0.005)
+		self._frequency = 60
 
 	def _write_byte_data(self, reg, value):
 		'''Write data to I2C with self.address'''
@@ -81,24 +118,16 @@ class PWM(object):
 		results = self.bus.read_byte_data(self.address, reg)
 		return results
 
-	def _get_bus_number(self):
-		'''Get bus number for Raspberry Pi'''
-		pi_type = GPIO.RPI_INFO['TYPE']
-		if pi_type in self._BUS_0_TYPES:
-			bus_number = 0
-		elif pi_type in self._BUS_1_TYPES:
-			bus_number = 1
-		else:
-			raise ValueError("Reading Pi type error, Your Pi {0} is not in the list".format(pi_type))
+	@property
+	def frequency(self):
+		return _frequency
 
-		if self._DEBUG:
-			print self._DEBUG_INFO, 'Get i2c bus number %d' % bus_number
-		return bus_number
-
-	def set_frequency(self, freq):
+	@frequency.setter
+	def frequency(self, freq):
 		'''Set PWM frequency'''
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Set frequency to %d' % freq
+		self._frequency = freq
 		prescale_value = 25000000.0
 		prescale_value /= 4096.0
 		prescale_value /= float(freq)
@@ -120,7 +149,7 @@ class PWM(object):
 
 		self.set_debug(self._DEBUG)
 
-	def set_value(self, channel, on, off):
+	def write(self, channel, on, off):
 		'''Set on and off value on specific channel'''
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Set channel "%d" to value "%d"' % (channel, off)
@@ -129,7 +158,7 @@ class PWM(object):
 		self._write_byte_data(self._LED0_OFF_L+4*channel, off & 0xFF)
 		self._write_byte_data(self._LED0_OFF_H+4*channel, off >> 8)
 
-	def set_all_value(self, on, off):
+	def write_all_value(self, on, off):
 		'''Set on and off value on all channel'''
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Set all channel to value "%d"' % (off)
@@ -138,7 +167,12 @@ class PWM(object):
 		self._write_byte_data(self._ALL_LED_OFF_L, off & 0xFF)
 		self._write_byte_data(self._ALL_LED_OFF_H, off >> 8)
 
-	def set_debug(self, debug):
+	@property
+	def debug(self):
+		return self._DEBUG
+
+	@debug.setter
+	def debug(self, debug):
 		'''Set if debug information shows'''
 		if debug in (True, False):
 			self._DEBUG = debug
@@ -154,12 +188,12 @@ if __name__ == '__main__':
 	import time
 
 	pwm = PWM()
-	pwm.set_frequency(60)
+	pwm.frequency = 60
 	for i in range(16):
 		time.sleep(0.5)
 		print '\nChannel %d\n' % i
 		time.sleep(0.5)
 		for j in range(4096):
-			pwm.set_value(i, 0, j)
+			pwm.write(i, 0, j)
 			print 'PWM value: %d' % j
 			time.sleep(0.0003)
