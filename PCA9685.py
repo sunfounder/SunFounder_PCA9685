@@ -94,7 +94,7 @@ class PWM(object):
 		self.bus = smbus.SMBus(self.bus_number)
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Reseting PCA9685 MODE1 (without SLEEP) and MODE2'
-		self.set_all_value(0, 0)
+		self.write_all_value(0, 0)
 		self._write_byte_data(self._MODE2, self._OUTDRV)
 		self._write_byte_data(self._MODE1, self._ALLCALL)
 		time.sleep(0.005)
@@ -147,8 +147,6 @@ class PWM(object):
 		time.sleep(0.005)
 		self._write_byte_data(self._MODE1, old_mode | 0x80)
 
-		self.set_debug(self._DEBUG)
-
 	def write(self, channel, on, off):
 		'''Set on and off value on specific channel'''
 		if self._DEBUG:
@@ -166,6 +164,10 @@ class PWM(object):
 		self._write_byte_data(self._ALL_LED_ON_H, on >> 8)
 		self._write_byte_data(self._ALL_LED_OFF_L, off & 0xFF)
 		self._write_byte_data(self._ALL_LED_OFF_H, off >> 8)
+
+	def map(self, x, in_min, in_max, out_min, out_max):
+		'''To map the value from arange to another'''
+		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 	@property
 	def debug(self):

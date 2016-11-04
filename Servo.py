@@ -14,10 +14,6 @@
 
 import PCA9685
 
-def _map(x, in_min, in_max, out_min, out_max):
-	'''To map the value from arange to another'''
-	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-
 class Servo(object):
 	'''Servo driver class'''
 	_MIN_PULSE_WIDTH = 600
@@ -39,12 +35,12 @@ class Servo(object):
 		self.lock = lock
 
 		self.pwm = PCA9685.PWM(bus_number=bus_number, address=address)
-		self.pwm.set_frequency(60)
-		self.pwm.set_value(self.channel, 0, self._DEFAULT_PULSE_WIDTH)
+		self.pwm.frequency = 60
+		self.pwm.write(self.channel, 0, self._DEFAULT_PULSE_WIDTH)
 
 	def _angle_to_analog(self, angle):
 		''' Calculate 12-bit analog value from giving angle '''
-		pulse_wide   = _map(angle, 0, 180, self._MIN_PULSE_WIDTH, self._MAX_PULSE_WIDTH)
+		pulse_wide   = self.pwm.map(angle, 0, 180, self._MIN_PULSE_WIDTH, self._MAX_PULSE_WIDTH)
 		analog_value = int(float(pulse_wide) / 1000000 * self._FREQUENCY * 4096)
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Angle %d equals Analog_value %d' % (angle, analog_value)
@@ -57,7 +53,7 @@ class Servo(object):
 	@offset.setter
 	def offset(self, value):
 		''' Set offset for much user-friendly '''
-		self.offset = value
+		self._offset = value
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Set offset to %d' % self.offset
 
@@ -73,7 +69,7 @@ class Servo(object):
 				raise ValueError("Servo \"{0}\" turn angle \"{1}\" is not in (0, 180).".format(self.channel, angle))
 		val = self._angle_to_analog(angle)
 		val += self.offset
-		self.pwm.set_value(self.channel, 0, val)
+		self.pwm.write(self.channel, 0, val)
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Turn angle = %d' % angle
 
