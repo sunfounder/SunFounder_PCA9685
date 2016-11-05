@@ -96,14 +96,14 @@ def test():
 	a = Servo(1)
 	for i in range(0, 180, 5):
 		print i
-		a.turn(i)
+		a.write(i)
 		time.sleep(0.1)
 	for i in range(180, 0, -5):
 		print i
-		a.turn(i)
+		a.write(i)
 		time.sleep(0.1)
 	for i in range(0, 91, 2):
-		a.turn(i)
+		a.write(i)
 		time.sleep(0.05)
 	print i
 
@@ -112,7 +112,7 @@ def install():
 	for i in range(16):
 		all_servo[i] = Servo(i)
 	for servo in all_servo:
-		servo.turn(90)
+		servo.write(90)
 
 if __name__ == '__main__':
 	import sys
