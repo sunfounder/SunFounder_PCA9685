@@ -39,8 +39,8 @@ class Servo(object):
 		self.lock = lock
 
 		self.pwm = PCA9685.PWM(bus_number=bus_number, address=address)
-		self.pwm.set_frequency(60)
-		self.pwm.set_value(self.channel, 0, self._DEFAULT_PULSE_WIDTH)
+		self.pwm.frequency = 60
+		self.pwm.write(self.channel, 0, self._DEFAULT_PULSE_WIDTH)
 
 	def _angle_to_analog(self, angle):
 		''' Calculate 12-bit analog value from giving angle '''
@@ -73,7 +73,7 @@ class Servo(object):
 				raise ValueError("Servo \"{0}\" turn angle \"{1}\" is not in (0, 180).".format(self.channel, angle))
 		val = self._angle_to_analog(angle)
 		val += self.offset
-		self.pwm.set_value(self.channel, 0, val)
+		self.pwm.write(self.channel, 0, val)
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Turn angle = %d' % angle
 
