@@ -7,8 +7,7 @@
 * Brand       : SunFounder
 * E-mail      : service@sunfounder.com
 * Website     : www.sunfounder.com
-* Update      : Cavon    2016-09-13    New release
-*               Cavon    2016-09-21    Add if_main for test
+* Version     : v1.1.0
 **********************************************************************
 '''
 
@@ -93,7 +92,7 @@ class PWM(object):
         self.bus = smbus.SMBus(self.bus_number)
         if self._DEBUG:
             print self._DEBUG_INFO, 'Reseting PCA9685 MODE1 (without SLEEP) and MODE2'
-        self.set_all_value(0, 0)
+        self.write_all_value(0, 0)
         self._write_byte_data(self._MODE2, self._OUTDRV)
         self._write_byte_data(self._MODE1, self._ALLCALL)
         time.sleep(0.005)
@@ -102,7 +101,7 @@ class PWM(object):
         mode1 = mode1 & ~self._SLEEP
         self._write_byte_data(self._MODE1, mode1)
         time.sleep(0.005)
-        self._frequency = 60
+        self.frequency = 60
 
     def _write_byte_data(self, reg, value):
         '''Write data to I2C with self.address'''
@@ -110,7 +109,7 @@ class PWM(object):
             print self._DEBUG_INFO, 'Writing value %2X to %2X' % (value, reg)
         try:
             self.bus.write_byte_data(self.address, reg, value)
-        except Exception i:
+        except Exception, i:
             if not self._check_i2c():
                 print i
 
@@ -118,8 +117,12 @@ class PWM(object):
         '''Read data from I2C with self.address'''
         if self._DEBUG:
             print self._DEBUG_INFO, 'Reading value from %2X' % reg
-        results = self.bus.read_byte_data(self.address, reg)
-        return results
+        try:
+            results = self.bus.read_byte_data(self.address, reg)
+            return results
+        except Exception, i:
+            if not self._check_i2c():
+                print i
 
     def _check_i2c(self):
         import commands
@@ -155,8 +158,6 @@ class PWM(object):
         time.sleep(0.005)
         self._write_byte_data(self._MODE1, old_mode | 0x80)
 
-        self.set_debug(self._DEBUG)
-
     def write(self, channel, on, off):
         '''Set on and off value on specific channel'''
         if self._DEBUG:
@@ -174,6 +175,10 @@ class PWM(object):
         self._write_byte_data(self._ALL_LED_ON_H, on >> 8)
         self._write_byte_data(self._ALL_LED_OFF_L, off & 0xFF)
         self._write_byte_data(self._ALL_LED_OFF_H, off >> 8)
+
+    def map(self, x, in_min, in_max, out_min, out_max):
+        '''To map the value from arange to another'''
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
     @property
     def debug(self):
