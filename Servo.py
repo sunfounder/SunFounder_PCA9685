@@ -19,7 +19,7 @@ class Servo(object):
 	_MIN_PULSE_WIDTH = 600
 	_MAX_PULSE_WIDTH = 2400
 	_DEFAULT_PULSE_WIDTH = 1500
-	_FREQUENCY = 60
+	_frequency = 60
 
 	_DEBUG = False
 	_DEBUG_INFO = 'DEBUG "Servo.py":'
@@ -40,10 +40,18 @@ class Servo(object):
 	def _angle_to_analog(self, angle):
 		''' Calculate 12-bit analog value from giving angle '''
 		pulse_wide   = self.pwm.map(angle, 0, 180, self._MIN_PULSE_WIDTH, self._MAX_PULSE_WIDTH)
-		analog_value = int(float(pulse_wide) / 1000000 * self._FREQUENCY * 4096)
+		analog_value = int(float(pulse_wide) / 1000000 * self.frequency * 4096)
 		if self._DEBUG:
 			print self._DEBUG_INFO, 'Angle %d equals Analog_value %d' % (angle, analog_value)
 		return analog_value
+
+	@property
+	def frequency(self):
+		return self._frequency
+
+	@frequency.setter
+	def frequency(self, value):
+		self.pwm.frequency = value
 
 	@property
 	def offset(self):
