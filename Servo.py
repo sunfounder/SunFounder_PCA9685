@@ -35,8 +35,7 @@ class Servo(object):
 		self.lock = lock
 
 		self.pwm = PCA9685.PWM(bus_number=bus_number, address=address)
-		self.pwm.frequency = 60
-		self.pwm.write(self.channel, 0, self._DEFAULT_PULSE_WIDTH)
+		self.write(90)
 
 	def _angle_to_analog(self, angle):
 		''' Calculate 12-bit analog value from giving angle '''
