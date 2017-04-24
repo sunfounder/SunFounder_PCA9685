@@ -183,8 +183,7 @@ class PWM(object):
         else:
             print "Device is missing."
             print "Check the address or wiring of PCA9685 Server driver, or email this information to support@sunfounder.com"
-            print 'exiting...'
-        quit()
+        raise IOError('IO error')
 
     @property
     def frequency(self):
