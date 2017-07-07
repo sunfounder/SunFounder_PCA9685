@@ -19,7 +19,7 @@ class Servo(object):
 	_MIN_PULSE_WIDTH = 600
 	_MAX_PULSE_WIDTH = 2400
 	_DEFAULT_PULSE_WIDTH = 1500
-	_frequency = 60
+	_FREQUENCY = 60
 
 	_DEBUG = False
 	_DEBUG_INFO = 'DEBUG "Servo.py":'
@@ -35,7 +35,11 @@ class Servo(object):
 		self.lock = lock
 
 		self.pwm = PCA9685.PWM(bus_number=bus_number, address=address)
+		self.frequency = self._FREQUENCY
 		self.write(90)
+	
+	def setup(self):
+		self.pwm.setup()
 
 	def _angle_to_analog(self, angle):
 		''' Calculate 12-bit analog value from giving angle '''
@@ -51,6 +55,7 @@ class Servo(object):
 
 	@frequency.setter
 	def frequency(self, value):
+		self._frequency = value
 		self.pwm.frequency = value
 
 	@property
