@@ -106,6 +106,7 @@ def test():
 	'''Servo driver test on channel 1'''
 	import time
 	a = Servo(1)
+	a.setup()
 	for i in range(0, 180, 5):
 		print i
 		a.write(i)
