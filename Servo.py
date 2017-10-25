@@ -125,6 +125,7 @@ def install():
 	for i in range(16):
 		all_servo[i] = Servo(i)
 	for servo in all_servo:
+		servo.setup()
 		servo.write(90)
 
 if __name__ == '__main__':
