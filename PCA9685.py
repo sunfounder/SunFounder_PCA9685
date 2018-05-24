@@ -38,6 +38,7 @@ class PWM(object):
     _INVRT              = 0x10
     _OUTDRV             = 0x04
 
+
     RPI_REVISION_0 = ["900092"]
     RPI_REVISION_1_MODULE_B  = ["Beta", "0002", "0003", "0004", "0005", "0006", "000d", "000e", "000f"]
     RPI_REVISION_1_MODULE_A  = ["0007", "0008", "0009",]
