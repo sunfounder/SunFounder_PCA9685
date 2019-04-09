@@ -240,7 +240,9 @@ class PWM(object):
 
     def map(self, x, in_min, in_max, out_min, out_max):
         '''To map the value from arange to another'''
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+        # dctian: need to cast to int, since python3 will return float for integer division
+        # whereas python2 return int for integer division
+        return int((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
 
     @property
     def debug(self):
