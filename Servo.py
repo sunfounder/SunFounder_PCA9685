@@ -12,7 +12,7 @@
 **********************************************************************
 '''
 
-import PCA9685
+from . import PCA9685
 
 class Servo(object):
 	'''Servo driver class'''
@@ -29,7 +29,7 @@ class Servo(object):
 		if channel<0 or channel > 16:
 			raise ValueError("Servo channel \"{0}\" is not in (0, 15).".format(channel))
 		if self._DEBUG:
-			print self._DEBUG_INFO, "Debug on"
+			print(self._DEBUG_INFO, "Debug on")
 		self.channel = channel
 		self.offset = offset
 		self.lock = lock
@@ -46,7 +46,7 @@ class Servo(object):
 		pulse_wide   = self.pwm.map(angle, 0, 180, self._MIN_PULSE_WIDTH, self._MAX_PULSE_WIDTH)
 		analog_value = int(float(pulse_wide) / 1000000 * self.frequency * 4096)
 		if self._DEBUG:
-			print self._DEBUG_INFO, 'Angle %d equals Analog_value %d' % (angle, analog_value)
+			print(self._DEBUG_INFO, 'Angle %d equals Analog_value %d' % (angle, analog_value))
 		return analog_value
 
 	@property
@@ -67,7 +67,7 @@ class Servo(object):
 		''' Set offset for much user-friendly '''
 		self._offset = value
 		if self._DEBUG:
-			print self._DEBUG_INFO, 'Set offset to %d' % self.offset
+			print(self._DEBUG_INFO, 'Set offset to %d' % self.offset)
 
 	def write(self, angle):
 		''' Turn the servo with giving angle. '''
@@ -83,7 +83,7 @@ class Servo(object):
 		val += self.offset
 		self.pwm.write(self.channel, 0, val)
 		if self._DEBUG:
-			print self._DEBUG_INFO, 'Turn angle = %d' % angle
+			print(self._DEBUG_INFO, 'Turn angle = %d' % angle)
 
 	@property
 	def debug(self):
@@ -98,9 +98,9 @@ class Servo(object):
 			raise ValueError('debug must be "True" (Set debug on) or "False" (Set debug off), not "{0}"'.format(debug))
 
 		if self._DEBUG:
-			print self._DEBUG_INFO, "Set debug on"
+			print(self._DEBUG_INFO, "Set debug on")
 		else:
-			print self._DEBUG_INFO, "Set debug off"
+			print(self._DEBUG_INFO, "Set debug off")
 
 def test():
 	'''Servo driver test on channel 1'''
@@ -108,17 +108,17 @@ def test():
 	a = Servo(1)
 	a.setup()
 	for i in range(0, 180, 5):
-		print i
+		print(i)
 		a.write(i)
 		time.sleep(0.1)
 	for i in range(180, 0, -5):
-		print i
+		print(i)
 		a.write(i)
 		time.sleep(0.1)
 	for i in range(0, 91, 2):
 		a.write(i)
 		time.sleep(0.05)
-	print i
+	print(i)
 
 def install():
 	all_servo = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]
